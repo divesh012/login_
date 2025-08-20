@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login / Signup - Gloora</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="index.css" />
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+</head>
+<body>
+  <div class="branding">Gloora</div>
+
+  <div class="container">
+    <div class="form-container" id="formContainer">
+
+      <!-- Sign Up Form -->
+<div class="form" id="signupForm" style="display: none;">
+  <h2>Sign Up</h2>
+  <input type="email" id="signupEmail" placeholder="Email" required />
+  <input type="password" id="signupPassword" placeholder="Password" required />
+  <button onclick="signupUser()">Sign Up</button>
+  <div class="toggle" onclick="toggleForm()">Already have an account? Login</div>
+</div>
+
+<!-- Login Form -->
+<div class="form" id="loginForm">
+  <h2>Login</h2>
+  <input type="email" id="loginEmail" placeholder="Email" required />
+  <input type="password" id="loginPassword" placeholder="Password" required />
+  <button onclick="loginUser()">Login</button>
+  <div class="toggle" onclick="toggleForm()">New here? Create an account</div>
+</div>  
+    </div> 
+  </div>
+
+  <script>
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyDml8j9f5RTYgcOfv9zS6koUMlaVHWVM8E",
+      authDomain: "otpdk-64ffb.firebaseapp.com",
+      projectId: "otpdk-64ffb",
+      storageBucket: "otpdk-64ffb.appspot.com",
+      messagingSenderId: "1035323876641",
+      appId: "1:1035323876641:web:5da83a916ce52f043d4a60"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // Toggle form between login/signup
+    function toggleForm() {
+      const loginForm = document.getElementById('loginForm');
+      const signupForm = document.getElementById('signupForm');
+
+      if (loginForm.style.display === 'none') {
+        loginForm.style.display = 'flex';
+        signupForm.style.display = 'none';
+      } else {
+        loginForm.style.display = 'none';
+        signupForm.style.display = 'flex';
+      }
+    }
+
+    // Detect URL parameter to auto-show form
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const mode = params.get('mode');
+
+      if (mode === 'signup') {
+        toggleForm(); // Show signup form on load
+      }
+    });
+
+    // Login function
+    function loginUser() {
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+
+      auth.signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          alert('Login Successful!');
+          console.log(userCredential.user);
+          window.location.href = "https://divesh012.github.io/after_gender/"; // Redirect after login
+        })
+        .catch((error) => {
+          alert('Login Error: ' + error.message);
+        });
+    }
+
+    // Signup function
+    function signupUser() {
+      const email = document.getElementById('signupEmail').value;
+      const password = document.getElementById('signupPassword').value;
+
+      auth.createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          alert('Signup Successful!');
+          console.log(userCredential.user);
+        })
+        .catch((error) => {
+          alert('Signup Error: ' + error.message);
+        });
+    }
+  </script>
+</body>
+</html>
